@@ -1,0 +1,11 @@
+@startuml
+
+[*] --> DisplaySplashScreen : AppLaunched
+
+DisplaySplashScreen --> DisplayMainScreen : LoadingFinishedAndUserLoggedIn
+DisplaySplashScreen --> DisplayLoginScreen : LoadingFinishedAndUserNotLoggedIn
+
+DisplayMainScreen --> [*] : AppClosed
+DisplayLoginScreen --> [*] : AppClosed
+
+@enduml
