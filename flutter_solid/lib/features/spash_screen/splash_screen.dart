@@ -12,7 +12,8 @@ import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_loading.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_start.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_state.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_solid/shared/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -21,39 +22,31 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AppCubit, AppState>(
       listener: (context, state) {
-        switch(state.runtimeType){
+        final navigationService = GetIt.I.get<NavigationService>();
+        switch(state.runtimeType){          
           case AppStateDisplayMainScreen:
-            context.go('/mainscreen');
+            navigationService.navigateTo(context, '/mainscreen');
             break;
           case AppStateDisplayLoginScreen:
-            context.go('/loginscreen');
+            navigationService.navigateTo(context,'/loginscreen');
             break;
           case AppStateDisplayLoadingErrorScreen:
-            context.go('/loadingerrorscreen');
+            navigationService.navigateTo(context,'/loadingerrorscreen');
             break;
         }
       },
       child: BlocProvider(
-      create: (context) => SplashCubit(SplashScreenStart()),
-
-      child: BlocBuilder<SplashCubit, SplashScreenState>(
-        builder:  (context, state) {
-          
-          String statusText = "";
-
+      create: (context) => GetIt.I.get<SplashCubit>()..startLoading(),
+      child: BlocListener<SplashCubit, SplashScreenState>(
+        listener: (context, state) {
           switch(state.runtimeType){
             case SplashScreenStart:
               context.read<SplashCubit>().startLoading();
               break;
-            case SplashScreenLoading:
-              statusText = "Loading..";
-              break;            
             case DisplayLoadingFinished:
-              statusText = "Loading finished!";
               context.read<SplashCubit>().startDelay();
               break;
             case DisplayLoadingError:
-              statusText = (state as DisplayLoadingError).errorMessageValue;
               context.read<SplashCubit>().startZeroDelay();
               break;
             case SplashScreenFinalState:
@@ -68,6 +61,25 @@ class SplashScreen extends StatelessWidget {
                 }
               }              
               break;
+          }          
+        }, 
+
+      child: BlocBuilder<SplashCubit, SplashScreenState>(     
+
+        builder:  (context, state) {
+          
+          String statusText = "";
+
+          switch(state.runtimeType){
+            case SplashScreenLoading:
+              statusText = "Loading..";
+              break;            
+            case DisplayLoadingFinished:
+              statusText = "Loading finished!";
+              break;
+            case DisplayLoadingError:
+              statusText = (state as DisplayLoadingError).errorMessageValue;
+              break;
           }
 
           return Scaffold(
@@ -79,7 +91,7 @@ class SplashScreen extends StatelessWidget {
 
         },
       ),
-      ));
+      )));
     
   }
 
