@@ -1,0 +1,14 @@
+@startuml
+
+[*] --> DisplaySplashScreen : AppLaunched
+
+state DisplaySplashScreen {
+  [*] --> SplashScreenLoading : StartLoading
+
+  SplashScreenLoading --> DisplayLoadingFinished : LoadingStepsFinished
+  SplashScreenLoading --> DisplayLoadingError : LoadingStepsThrowsError
+
+  DisplayLoadingFinished --> [*] : DelayFinished
+  DisplayLoadingError --> [*] : DelayFinished
+}
+@enduml

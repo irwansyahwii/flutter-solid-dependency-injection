@@ -4,8 +4,10 @@
 
 DisplaySplashScreen --> DisplayMainScreen : LoadingFinishedAndUserLoggedIn
 DisplaySplashScreen --> DisplayLoginScreen : LoadingFinishedAndUserNotLoggedIn
+DisplaySplashScreen --> DisplayLoadingErrorScreen: LoadingStepsThrowsError
 
 DisplayMainScreen --> [*] : AppClosed
 DisplayLoginScreen --> [*] : AppClosed
+DisplayLoadingErrorScreen --> [*] : AppClosed
 
 @enduml

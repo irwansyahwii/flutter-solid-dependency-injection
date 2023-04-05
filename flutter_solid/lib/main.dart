@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_solid/features/spash_screen/app_states/app_cubit.dart';
+import 'package:flutter_solid/features/spash_screen/app_states/app_state_display_login_screen.dart';
+import 'package:flutter_solid/features/spash_screen/app_states/app_state_display_main_screen.dart';
+import 'package:flutter_solid/features/spash_screen/app_states/app_state_display_splash_screen.dart';
+import 'package:flutter_solid/features/spash_screen/app_states/app_state_start.dart';
 import 'package:flutter_solid/shared/routing/router_config.dart';
+import 'package:go_router/go_router.dart';
+
+import 'features/spash_screen/app_states/app_state.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +20,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: routerConfig,);
+    return BlocProvider(
+      create: (context) => AppCubit(AppStateStart()),
+      child:MaterialApp.router(routerConfig: routerConfig));
+    // return MaterialApp.router(routerConfig: routerConfig,);
   }
 }
 
