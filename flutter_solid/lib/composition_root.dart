@@ -1,5 +1,7 @@
 import 'package:flutter_solid/features/spash_screen/app_states/app_cubit.dart';
 import 'package:flutter_solid/features/spash_screen/app_states/app_state_start.dart';
+import 'package:flutter_solid/features/spash_screen/services/app_loading_service.dart';
+import 'package:flutter_solid/features/spash_screen/services/fake_app_loading_service.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_start.dart';
 import 'package:flutter_solid/shared/services/delay_service.dart';
 import 'package:flutter_solid/shared/services/delay_service_future.dart';
@@ -14,8 +16,12 @@ class CompositionRoot {
     GetIt.I.allowReassignment = true;
     GetIt.I.registerSingleton<NavigationService>(NavigationServiceGoRouter());
     GetIt.I.registerSingleton<DelayService>(DelayServiceFuture());
+    GetIt.I.registerSingleton<AppLoadingService>(FakeAppLoadingService());
     
-    GetIt.I.registerLazySingleton<SplashCubit>(() => SplashCubit(SplashScreenStart(), delayService: GetIt.I.get<DelayService>()));
+    GetIt.I.registerLazySingleton<SplashCubit>(() => 
+      SplashCubit(SplashScreenStart(), 
+        delayService: GetIt.I.get<DelayService>(),
+        appLoadingService: GetIt.I.get<AppLoadingService>()));
 
     GetIt.I.registerLazySingleton<AppCubit>(() => AppCubit(AppStateStart()));
 

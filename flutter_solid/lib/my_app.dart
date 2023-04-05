@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GetIt.I.get<AppCubit>()..appLaunched(),
+      create: (context) => GetIt.I.get<AppCubit>(),      
       child:MaterialApp.router(routerConfig: routerConfig));
     // return MaterialApp.router(routerConfig: routerConfig,);
   }

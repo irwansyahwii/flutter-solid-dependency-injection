@@ -10,7 +10,6 @@ import 'package:flutter_solid/features/spash_screen/splash_screen_states/display
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_cubit.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_final_state.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_loading.dart';
-import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_start.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_state.dart';
 import 'package:flutter_solid/shared/services/navigation_service.dart';
 import 'package:get_it/get_it.dart';
@@ -36,32 +35,19 @@ class SplashScreen extends StatelessWidget {
         }
       },
       child: BlocProvider(
-      create: (context) => GetIt.I.get<SplashCubit>()..startLoading(),
+      create: (context) => GetIt.I.get<SplashCubit>(),
       child: BlocListener<SplashCubit, SplashScreenState>(
         listener: (context, state) {
-          switch(state.runtimeType){
-            case SplashScreenStart:
-              context.read<SplashCubit>().startLoading();
-              break;
-            case DisplayLoadingFinished:
-              context.read<SplashCubit>().startDelay();
-              break;
-            case DisplayLoadingError:
-              context.read<SplashCubit>().startZeroDelay();
-              break;
-            case SplashScreenFinalState:
-              final currentState = (state as SplashScreenFinalState);
-              if(currentState.isErrorHappened){                
-                context.read<AppCubit>().loadingStepsThrowsError(currentState.errorMessage);
-              }else {
-                if(currentState.isUserLoggedIn){
-                  context.read<AppCubit>().loadingFinishedAndUserLoggedIn();
-                }else{
-                  context.read<AppCubit>().loadingFinishedAndUserNotLoggedIn();
-                }
-              }              
-              break;
-          }          
+          if(state.runtimeType == SplashScreenFinalState){          
+            final splashFinalState = (state as SplashScreenFinalState);
+            if(splashFinalState.isUserLoggedIn){
+              context.read<AppCubit>().state.loadingFinishedAndUserLoggedIn();
+            }else if(splashFinalState.isErrorHappened){
+              context.read<AppCubit>().state.loadingStepsThrowsError(Exception(splashFinalState.errorMessage));
+            }else {
+              context.read<AppCubit>().state.loadingFinishedAndUserNotLoggedIn();
+            }
+          }
         }, 
 
       child: BlocBuilder<SplashCubit, SplashScreenState>(     
@@ -78,8 +64,8 @@ class SplashScreen extends StatelessWidget {
               statusText = "Loading finished!";
               break;
             case DisplayLoadingError:
-              statusText = (state as DisplayLoadingError).errorMessageValue;
-              break;
+              statusText = (state as DisplayLoadingError).errorMessage;
+              break;              
           }
 
           return Scaffold(
