@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_solid/features/spash_screen/app_states/app_cubit.dart';
+import 'package:flutter_solid/features/spash_screen/app_states/app_state_display_login_screen.dart';
 import 'package:flutter_solid/features/spash_screen/app_states/app_state_display_main_screen.dart';
 import 'package:flutter_solid/features/spash_screen/app_states/app_state_display_splash_screen.dart';
 import 'package:flutter_solid/features/spash_screen/app_states/app_state_start.dart';
@@ -106,4 +107,41 @@ void main() {
     // expect(find.byKey(const Key('main-screen')), findsOneWidget);
 
   });  
+
+  testWidgets('app DisplayLoginScreen when the user is not logged in and loading finished', (WidgetTester tester) async {
+    GetIt.I.allowReassignment = true;
+    await GetIt.I.reset(dispose: true);
+
+    await tester.pumpAndSettle();
+
+    final fakeLoadingServiceUserLoggedIn = FakeLoadingServiceJustDelay(tester);
+    fakeLoadingServiceUserLoggedIn.isUserLoggedIn = false;
+
+    GetIt.I.registerSingleton<NavigationService>(NavigationServiceGoRouter());
+    GetIt.I.registerSingleton<DelayService>(FakeDelayServiceDoNothing());
+    GetIt.I.registerSingleton<AppLoadingService>(fakeLoadingServiceUserLoggedIn);
+
+
+    GetIt.I.registerLazySingleton(() => SplashCubit(SplashScreenStart(), 
+      delayService: GetIt.I.get<DelayService>(), 
+      appLoadingService: GetIt.I.get<AppLoadingService>()));
+    GetIt.I.registerLazySingleton(() => AppCubit(AppStateStart()));
+
+    final appCubit = GetIt.I.get<AppCubit>();    
+    final splashCubit = GetIt.I.get<SplashCubit>();    
+    appCubit.subscribeToSplashScreenState(splashCubit.stream);
+
+    
+    const myApp = MyApp();
+    await tester.pumpWidget(myApp, const Duration(seconds: 6));
+    await tester.pumpAndSettle(const Duration(seconds: 6));    
+
+    expect(appCubit.state.runtimeType, AppStateDisplayLoginScreen);
+    expect(splashCubit.state.runtimeType, SplashScreenFinalState);
+        
+    await tester.pumpFrames(myApp, const Duration(seconds: 10));    
+    
+    // expect(find.byKey(const Key('main-screen')), findsOneWidget);
+
+  });    
 }
