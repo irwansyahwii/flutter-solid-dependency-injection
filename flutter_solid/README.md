@@ -46,18 +46,24 @@ state DisplayMainScreen {
     [*] --> OnboardingNewUser : ProfileNotFound
 
     OnboardingNewUser --> DisplayProfileInReview : ProfileInReview
+    OnboardingNewUser --> [*] : AppClosed
 
     [*] --> DisplayError : ProfileLoadError
     DisplayError --> OnboardingNewUser : ProfileNotFound
     DisplayError --> DisplayProfileInReview : ProfileInReview
     DisplayError --> DisplayRevisionFlow : ProfileNeedsRevision
+    DisplayError --> [*] : AppClosed
 
     [*] --> DisplayRevisionFlow : ProfileNeedsRevision
     DisplayRevisionFlow --> DisplayProfileInReview : ProfileInReview
+    DisplayRevisionFlow --> [*] : AppClosed
 
     [*] --> DisplayProfileInReview : ProfileInReview
     DisplayProfileInReview --> DisplayRevisionFlow : ProfileNeedsRevision
     DisplayProfileInReview --> DisplayProfilePerformance : ProfileActive
+    DisplayProfileInReview --> [*] : AppClosed
+
+
 
   }
 
