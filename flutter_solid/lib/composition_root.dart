@@ -18,10 +18,18 @@ class CompositionRoot {
     GetIt.I.registerSingleton<DelayService>(DelayServiceFuture());
     GetIt.I.registerSingleton<AppLoadingService>(FakeAppLoadingService());
     
-    GetIt.I.registerLazySingleton<SplashCubit>(() => 
-      SplashCubit(SplashScreenStart(), 
+    GetIt.I.registerLazySingleton<SplashCubit>(() { 
+      final splashCubit = SplashCubit(SplashScreenStart(), 
         delayService: GetIt.I.get<DelayService>(),
-        appLoadingService: GetIt.I.get<AppLoadingService>()));
+        appLoadingService: GetIt.I.get<AppLoadingService>());
+
+      final appCubit = GetIt.I.get<AppCubit>();
+
+      appCubit.subscribeToSplashScreenState(splashCubit.stream);
+
+      return splashCubit;
+
+      });
 
     GetIt.I.registerLazySingleton<AppCubit>(() => AppCubit(AppStateStart()));
 

@@ -38,16 +38,16 @@ class SplashScreen extends StatelessWidget {
       create: (context) => GetIt.I.get<SplashCubit>(),
       child: BlocListener<SplashCubit, SplashScreenState>(
         listener: (context, state) {
-          if(state.runtimeType == SplashScreenFinalState){          
-            final splashFinalState = (state as SplashScreenFinalState);
-            if(splashFinalState.isUserLoggedIn){
-              context.read<AppCubit>().state.loadingFinishedAndUserLoggedIn();
-            }else if(splashFinalState.isErrorHappened){
-              context.read<AppCubit>().state.loadingStepsThrowsError(Exception(splashFinalState.errorMessage));
-            }else {
-              context.read<AppCubit>().state.loadingFinishedAndUserNotLoggedIn();
-            }
-          }
+          // if(state.runtimeType == SplashScreenFinalState){          
+          //   final splashFinalState = (state as SplashScreenFinalState);
+          //   if(splashFinalState.isUserLoggedIn){
+          //     context.read<AppCubit>().state.loadingFinishedAndUserLoggedIn();
+          //   }else if(splashFinalState.isErrorHappened){
+          //     context.read<AppCubit>().state.loadingStepsThrowsError(Exception(splashFinalState.errorMessage));
+          //   }else {
+          //     context.read<AppCubit>().state.loadingFinishedAndUserNotLoggedIn();
+          //   }
+          // }
         }, 
 
       child: BlocBuilder<SplashCubit, SplashScreenState>(     
@@ -58,7 +58,7 @@ class SplashScreen extends StatelessWidget {
 
           switch(state.runtimeType){
             case SplashScreenLoading:
-              statusText = "Loading..";
+              statusText = "Loading...";
               break;            
             case DisplayLoadingFinished:
               statusText = "Loading finished!";

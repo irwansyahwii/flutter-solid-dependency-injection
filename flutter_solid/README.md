@@ -4,13 +4,63 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## App State Diagram 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```mermaid
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+stateDiagram-v2  
+  [*] --> DisplaySplashScreen : AppLaunched
+
+DisplaySplashScreen --> DisplayMainScreen : LoadingFinishedAndUserLoggedIn
+DisplaySplashScreen --> DisplayLoginScreen : LoadingFinishedAndUserNotLoggedIn
+DisplaySplashScreen --> DisplayLoadingErrorScreen: LoadingStepsThrowsError
+
+DisplayMainScreen --> [*] : AppClosed
+
+DisplayLoginScreen --> [*] : AppClosed
+DisplayLoginScreen --> DisplayMainScreen : UserLoggedIn
+
+DisplayLoadingErrorScreen --> [*] : AppClosed
+
+state DisplaySplashScreen {
+  [*] --> SplashScreenLoading : StartLoading
+
+  SplashScreenLoading --> DisplayLoadingFinished : LoadingStepsFinished
+  SplashScreenLoading --> DisplayLoadingError : LoadingStepsThrowsError
+
+  DisplayLoadingFinished --> [*] : DelayFinished
+  DisplayLoadingError --> [*] : DelayFinished
+}
+
+state DisplayMainScreen {
+  [*] --> DisplayTabProfile : TabProfileTapped
+
+  DisplayTabProfile --> DisplayTabAccount : TabAccountTapped
+  DisplayTabProfile --> [*] : AppClosed
+
+  DisplayTabAccount --> DisplayTabProfile : TabProfileTapped
+  DisplayTabAccount --> [*] : AppClosed
+
+  state DisplayTabProfile {
+    [*] --> OnboardingNewUser : ProfileNotFound
+
+    OnboardingNewUser --> DisplayProfileInReview : ProfileInReview
+
+    [*] --> DisplayError : ProfileLoadError
+    DisplayError --> OnboardingNewUser : ProfileNotFound
+    DisplayError --> DisplayProfileInReview : ProfileInReview
+    DisplayError --> DisplayRevisionFlow : ProfileNeedsRevision
+
+    [*] --> DisplayRevisionFlow : ProfileNeedsRevision
+    DisplayRevisionFlow --> DisplayProfileInReview : ProfileInReview
+
+    [*] --> DisplayProfileInReview : ProfileInReview
+    DisplayProfileInReview --> DisplayRevisionFlow : ProfileNeedsRevision
+    DisplayProfileInReview --> DisplayProfilePerformance : ProfileActive
+
+  }
+
+}
+
+```

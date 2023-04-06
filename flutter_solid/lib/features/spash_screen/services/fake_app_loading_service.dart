@@ -5,7 +5,7 @@ class FakeAppLoadingService extends AppLoadingService {
   Future<void> run() async {
     await Future.delayed(const Duration(seconds: 3));
 
-    isUserLoggedIn = false;
+    isUserLoggedIn = true;
 
     // throw Exception("adadsa");
   }

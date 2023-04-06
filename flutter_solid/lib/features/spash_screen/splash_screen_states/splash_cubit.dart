@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_solid/features/spash_screen/services/app_loading_service.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/display_loading_error.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/display_loading_finished.dart';
-import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_final_state.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_loading.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_start.dart';
 import 'package:flutter_solid/features/spash_screen/splash_screen_states/splash_screen_state.dart';
@@ -30,7 +29,7 @@ class SplashCubit extends Cubit<SplashScreenState> {
       case DisplayLoadingError:
         return onDisplayLoadingError();        
       default:
-        return Future.value();
+        return Future.delayed(const Duration(microseconds: 100));
     }
   }  
 
@@ -58,7 +57,7 @@ class SplashCubit extends Cubit<SplashScreenState> {
   }
 
   Future<void> onSplashScreenStart(){
-    return Future.value();
+    return Future.delayed(const Duration(microseconds: 1));
   }
 
 }

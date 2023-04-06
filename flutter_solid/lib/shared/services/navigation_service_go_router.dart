@@ -6,8 +6,9 @@ import 'package:go_router/go_router.dart';
 class NavigationServiceGoRouter extends NavigationService {
   @override
   Future<void> navigateTo(BuildContext context, String path) async{
-    context.go(path);
-    // await GoRouter.of(context).push(path);
+    print('navigating to $path');
+    // context.go(path);
+    await GoRouter.of(context).push(path);
     return Future.value();
   }
 
