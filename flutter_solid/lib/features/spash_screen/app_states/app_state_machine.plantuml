@@ -14,42 +14,42 @@ DisplayLoginScreen --> DisplayMainScreen : UserLoggedIn
 DisplayLoadingErrorScreen --> [*] : AppClosed
 
 state DisplaySplashScreen {
-  [*] --> SplashScreenLoading : StartLoading
+  ' [*] --> SplashScreenLoading : StartLoading
 
-  SplashScreenLoading --> DisplayLoadingFinished : LoadingStepsFinished
-  SplashScreenLoading --> DisplayLoadingError : LoadingStepsThrowsError
+  ' SplashScreenLoading --> DisplayLoadingFinished : LoadingStepsFinished
+  ' SplashScreenLoading --> DisplayLoadingError : LoadingStepsThrowsError
 
-  DisplayLoadingFinished --> [*] : DelayFinished
-  DisplayLoadingError --> [*] : DelayFinished
+  ' DisplayLoadingFinished --> [*] : DelayFinished
+  ' DisplayLoadingError --> [*] : DelayFinished
 }
 
 state DisplayMainScreen {
-  [*] --> DisplayTabProfile : TabProfileTapped
+  ' [*] --> DisplayTabProfile : TabProfileTapped
 
-  DisplayTabProfile --> DisplayTabAccount : TabAccountTapped
-  DisplayTabProfile --> [*] : AppClosed
+  ' DisplayTabProfile --> DisplayTabAccount : TabAccountTapped
+  ' DisplayTabProfile --> [*] : AppClosed
 
-  DisplayTabAccount --> DisplayTabProfile : TabProfileTapped
-  DisplayTabAccount --> [*] : AppClosed
+  ' DisplayTabAccount --> DisplayTabProfile : TabProfileTapped
+  ' DisplayTabAccount --> [*] : AppClosed
 
-  state DisplayTabProfile {
-    [*] --> OnboardingNewUser : ProfileNotFound
+  ' state DisplayTabProfile {
+    ' [*] --> OnboardingNewUser : ProfileNotFound
 
-    OnboardingNewUser --> DisplayProfileInReview : ProfileInReview
+    ' OnboardingNewUser --> DisplayProfileInReview : ProfileInReview
 
-    [*] --> DisplayError : ProfileLoadError
-    DisplayError --> OnboardingNewUser : ProfileNotFound
-    DisplayError --> DisplayProfileInReview : ProfileInReview
-    DisplayError --> DisplayRevisionFlow : ProfileNeedsRevision
+    ' [*] --> DisplayError : ProfileLoadError
+    ' DisplayError --> OnboardingNewUser : ProfileNotFound
+    ' DisplayError --> DisplayProfileInReview : ProfileInReview
+    ' DisplayError --> DisplayRevisionFlow : ProfileNeedsRevision
 
-    [*] --> DisplayRevisionFlow : ProfileNeedsRevision
-    DisplayRevisionFlow --> DisplayProfileInReview : ProfileInReview
+    ' [*] --> DisplayRevisionFlow : ProfileNeedsRevision
+    ' DisplayRevisionFlow --> DisplayProfileInReview : ProfileInReview
 
-    [*] --> DisplayProfileInReview : ProfileInReview
-    DisplayProfileInReview --> DisplayRevisionFlow : ProfileNeedsRevision
-    DisplayProfileInReview --> DisplayProfilePerformance : ProfileActive
+    ' [*] --> DisplayProfileInReview : ProfileInReview
+    ' DisplayProfileInReview --> DisplayRevisionFlow : ProfileNeedsRevision
+    ' DisplayProfileInReview --> DisplayProfilePerformance : ProfileActive
 
-  }
+  ' }
 
 }
 
